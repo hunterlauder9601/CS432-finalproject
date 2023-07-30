@@ -1,0 +1,214 @@
+<body>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        #wrapper {
+          padding-left: 0;
+          -webkit-transition: all 0.5s ease;
+          -moz-transition: all 0.5s ease;
+          -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+        }
+
+        #wrapper.toggled {
+          padding-left: 250px;
+        }
+
+        #sidebar-wrapper {
+          z-index: 1000;
+          position: fixed;
+          left: 250px;
+          width: 0;
+          height: 100%;
+          margin-left: -250px;
+          overflow-y: auto;
+          background: #000;
+          -webkit-transition: all 0.5s ease;
+          -moz-transition: all 0.5s ease;
+          -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+          width: 250px;
+        }
+
+        #page-content-wrapper {
+          width: 100%;
+          position: absolute;
+          padding: 15px;
+        }
+
+        #wrapper.toggled #page-content-wrapper {
+          position: absolute;
+          margin-right: -250px;
+        }
+
+
+        /* Sidebar Styles */
+
+        .sidebar-nav {
+          position: absolute;
+          top: 0;
+          width: 250px;
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        .sidebar-nav li {
+          text-indent: 20px;
+          line-height: 40px;
+        }
+
+        .sidebar-nav li a {
+          display: block;
+          text-decoration: none;
+          color: #999999;
+        }
+
+        .sidebar-nav li a:hover {
+          text-decoration: none;
+          color: #fff;
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-nav li a:active, .sidebar-nav li a:focus {
+          text-decoration: none;
+        }
+
+        .sidebar-nav>.sidebar-brand {
+          height: 65px;
+          font-size: 18px;
+          line-height: 60px;
+        }
+
+        .sidebar-nav>.sidebar-brand a {
+          color: #999999;
+        }
+
+        .sidebar-nav>.sidebar-brand a:hover {
+          color: #fff;
+          background: none;
+        }
+
+        @media(min-width:768px) {
+          #wrapper {
+            padding-left: 0;
+          }
+          #wrapper.toggled {
+            padding-left: 250px;
+          }
+          #sidebar-wrapper {
+            width: 0;
+          }
+          #wrapper.toggled #sidebar-wrapper {
+            width: 250px;
+          }
+          #page-content-wrapper {
+            padding: 20px;
+            position: relative;
+          }
+          #wrapper.toggled #page-content-wrapper {
+            position: relative;
+            margin-right: 0;
+          }
+          .report {
+              border-collapse: collapse;
+              border-top: 1px solid black;
+              text-align: center;
+          }
+        }
+    </style>
+
+    <div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="/">
+                        Student DBMS Home
+                    </a>
+                </li>
+                <li>
+                    <a href="/report?op=1">{{opDetails["1"]["title"]}}</a>
+                </li>
+                <li>
+                    <a href="/report?op=2">{{opDetails["2"]["title"]}}</a>
+                </li>
+                <li>
+                    <a href="/report?op=3">{{opDetails["3"]["title"]}}</a>
+                </li>
+                <li>
+                    <a href="/report?op=4">{{opDetails["4"]["title"]}}</a>
+                </li>
+                <li>
+                    <a href="/report?op=5">{{opDetails["5"]["title"]}}</a>
+                </li>
+                <li>
+                    <a href="/report?op=6">{{opDetails["6"]["title"]}}</a>
+                </li>
+                <li>
+                    <a href="/report?op=7">{{opDetails["7"]["title"]}}</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <h1>{{functionTitle}}</h1>
+                <p>{{functionDescription}}</p>
+                <br>
+                <p><b>Query</b></p>
+                <form action="/report" method="GET">
+                    <input hidden type="text" name="op" value="{{curOp}}"/>
+                    <input hidden type="text" name="search" value="1"/>
+                {% for field in fieldList %}
+                    {% if curOp!="2" %}
+                        <input type="text" name="{{field}}" placeholder="{{field}}"/>
+                    {% else %}
+                        <input type="radio" name="secondary" value="{{op2Helper[field]}}"/> {{field}}
+                    {% endif %}
+                    <br>
+                {% endfor %}
+                <br><input type="submit" value="{{opAction}}"/>
+                </form>
+                <br><br>
+                <p><b>Report</b></p>
+                <table class="report">
+                    <tr>
+                        {% for h in headers %}
+                            <td text-align="center" width="{{w}}%"> <b>{{h}}</b> </td>
+                        {% endfor %}
+                    </tr>
+                {% for row in table %}
+                    <tr class="report">
+                    {% for col in row %}
+                        <td text-align="center"> {{col}} </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+                </table>
+
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+
+</body>
